@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "vite build && node scripts/package-worker.mjs",
+    "build": "vite build",
+    "build:sites": "npm run build && node scripts/package-worker.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "check": "node --test tests/*.test.js"
   },

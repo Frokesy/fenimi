@@ -41,7 +41,15 @@ npm run build
 npm run preview
 ```
 
-`npm run preview` also uses the local admin middleware and `.env.local`. `npm run build` produces a React static build in `build/` and a deployable Worker in `dist/server/index.js`, including the bundled static assets and server authorization. Never edit generated output.
+`npm run preview` also uses the local admin middleware and `.env.local`. `npm run build` produces a React static build in `build/`. `npm run build:sites` additionally packages a Sites Worker in `dist/server/index.js`, including the bundled static assets and server authorization; it requires `.openai/hosting.json` from the Sites hosting setup. Never edit generated output.
+
+## Deploy to Vercel
+
+Import this repository with the Root Directory set to the directory containing `package.json` and `vercel.json` (the repository root). The checked-in Vercel configuration selects Vite, runs `npm run build`, and serves `build/`. It also serves the React entry point for direct visits to `/admin` and `/admin/dashboard`.
+
+Push these files to the connected Git branch to create a new deployment. If configuring the project manually, use Framework Preset **Vite**, Build Command **npm run build**, and Output Directory **build**.
+
+This deploys the customer storefront. The local admin middleware and Sites Worker do not run on Vercel; Studio authentication and product writes require a separate Vercel-compatible backend. Setting `LOCAL_ADMIN_PASSWORD` in Vercel alone will not enable admin access.
 
 The browser regression suite is `tests/browser.cjs`. Run a dedicated local QA server on port 5174 with a temporary `LOCAL_ADMIN_PASSWORD`, then run `QA_ADMIN_PASSWORD=<same-temporary-password> node tests/browser.cjs`. Set `QA_URL` if using another port. Install the Playwright Chromium browser first with `npx playwright install chromium`. The suite covers separate-item previews, conflicting garments, sizes, full/deposit/quote checkout, admin login/logout and rejected writes, upload/conversion states, mobile, reduced motion, keyboard dismissal and the 3D fallback.
 
